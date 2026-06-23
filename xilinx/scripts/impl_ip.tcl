@@ -15,10 +15,11 @@ init_impl $xilinx_root $argc $argv
 switch $proj {
 
     clkwiz {
+        set prim_in_freq [expr { $board eq "basys3" ? "100.000" : "200.000" }]
         create_ip -name clk_wiz -vendor xilinx.com -library ip -version 6.0 -module_name $proj
         set_property -dict [list \
             CONFIG.PRIM_SOURCE {No_buffer} \
-            CONFIG.PRIM_IN_FREQ {200.000} \
+            CONFIG.PRIM_IN_FREQ $prim_in_freq \
             CONFIG.CLKOUT1_USED {true} \
             CONFIG.CLK_OUT1_PORT {clk_20} \
             CONFIG.CLKOUT1_REQUESTED_OUT_FREQ {20.000} \

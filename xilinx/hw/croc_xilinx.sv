@@ -10,12 +10,21 @@
 // Philippe Sauter <phsauter@iis.ee.ethz.ch>
 
 `ifdef TARGET_GENESYS2
+  `define USE_DIFFERENTIAL_CLOCK
   `define USE_RESETN
   `define USE_JTAG_TRSTN
   `define USE_STATUS
   `define USE_SWITCHES
   `define USE_LEDS
   `define USE_FAN
+  `define USE_VIO
+`endif
+
+`ifdef TARGET_BASYS3
+  `define USE_RESET
+  `define USE_STATUS
+  `define USE_SWITCHES
+  `define USE_LEDS
   `define USE_VIO
 `endif
 
@@ -27,7 +36,9 @@ module croc_xilinx import croc_pkg::*; #(
   localparam int unsigned GpioCount = 4
 ) (
   input  logic  sys_clk_p,
+`ifdef USE_DIFFERENTIAL_CLOCK
   input  logic  sys_clk_n,
+`endif
 
 `ifdef USE_RESET
   input  logic  sys_reset,
@@ -76,6 +87,7 @@ module croc_xilinx import croc_pkg::*; #(
   wire sys_clk;
   wire soc_clk;
 
+`ifdef USE_DIFFERENTIAL_CLOCK
   IBUFDS #(
     .IBUF_LOW_PWR ("FALSE")
   ) i_bufds_sys_clk (
@@ -83,6 +95,14 @@ module croc_xilinx import croc_pkg::*; #(
     .IB ( sys_clk_n ),
     .O  ( sys_clk   )
   );
+`else
+  IBUF #(
+    .IBUF_LOW_PWR ("FALSE")
+  ) i_buf_sys_clk (
+    .I  ( sys_clk_p ),
+    .O  ( sys_clk   )
+  );
+`endif
 
   clkwiz i_clkwiz (
     .clk_in1  ( sys_clk ),
