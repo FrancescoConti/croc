@@ -71,11 +71,20 @@ get_bender_target() {
 generate_flist() {
     local bender_target
     bender_target=$(get_bender_target)
+
+    # Basys3 uses BSCANE2 for JTAG: pass 'xilinx' and 'bscane' so that
+    # riscv-dbg selects dmi_bscane_tap.sv instead of dmi_jtag_tap.sv.
+    local extra_targets=""
+    if [ "$TARGET" = "basys3" ]; then
+        extra_targets="-t xilinx -t bscane"
+    fi
+
     run_cmd "echo [INFO][Bender] Generate add_sources.${TARGET}.tcl"
     run_cmd "bender \
         script vivado \
         -t ${bender_target} \
         -t synthesis \
+        ${extra_targets} \
         -D COMMON_CELLS_ASSERTS_OFF=1 \
         > scripts/add_sources.${TARGET}.tcl"
 
