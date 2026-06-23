@@ -59,6 +59,7 @@ module croc_xilinx import croc_pkg::*; #(
   output logic   status_o,
 `endif
 
+`ifndef TARGET_BASYS3
   input  logic  jtag_tck_i,
   input  logic  jtag_tms_i,
   input  logic  jtag_tdi_i,
@@ -70,6 +71,7 @@ module croc_xilinx import croc_pkg::*; #(
   output logic  jtag_vdd_o,
   output logic  jtag_gnd_o,
 `endif
+`endif // TARGET_BASYS3
 
 `ifdef USE_FAN
   input  logic [2:0]  fan_sw, // switch 4-6
@@ -197,6 +199,14 @@ module croc_xilinx import croc_pkg::*; #(
   //  JTAG  //
   ////////////
 
+`ifdef TARGET_BASYS3
+  // BSCANE2 mode: no external pins; dmi_bscane_tap drives through config JTAG
+  logic jtag_tck_i, jtag_tms_i, jtag_tdi_i, jtag_tdo_o, jtag_trst_ni;
+  assign jtag_tck_i   = '0;
+  assign jtag_tms_i   = '0;
+  assign jtag_tdi_i   = '0;
+  assign jtag_trst_ni = '1;
+`else
 `ifdef USE_JTAG_VDDGND
   assign jtag_vdd_o = 1'b1;
   assign jtag_gnd_o = 1'b0;
@@ -205,6 +215,7 @@ module croc_xilinx import croc_pkg::*; #(
   logic jtag_trst_ni;
   assign jtag_trst_ni = 1'b1;
 `endif
+`endif // TARGET_BASYS3
 
 
   /////////////////////////

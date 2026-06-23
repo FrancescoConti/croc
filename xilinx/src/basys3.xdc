@@ -19,9 +19,6 @@ create_clock -period $SYS_TCK -name sys_clk_p [get_ports sys_clk_p]
 set SOC_TCK 50.0
 set soc_clk [get_clocks -of_objects [get_pins i_clkwiz/clk_20]]
 
-# JTAG TCK
-set_property CLOCK_DEDICATED_ROUTE FALSE [get_nets jtag_tck_i_IBUF]
-
 ############
 # Switches #
 ############
@@ -68,11 +65,5 @@ set_property -dict { PACKAGE_PIN L1   IOSTANDARD LVCMOS33 } [get_ports { status_
 ## UART
 set_property -dict { PACKAGE_PIN A18   IOSTANDARD LVCMOS33 } [get_ports { uart_tx_o }];
 set_property -dict { PACKAGE_PIN B18   IOSTANDARD LVCMOS33 } [get_ports { uart_rx_i }];
-
-## PMOD JA
-set_property -dict { PACKAGE_PIN J1  IOSTANDARD LVCMOS33 } [get_ports { jtag_tck_i }]; # JA1
-set_property -dict { PACKAGE_PIN L2  IOSTANDARD LVCMOS33 } [get_ports { jtag_tdi_i }]; # JA2
-set_property -dict { PACKAGE_PIN J2  IOSTANDARD LVCMOS33 } [get_ports { jtag_tdo_o }]; # JA3
-set_property -dict { PACKAGE_PIN G2  IOSTANDARD LVCMOS33 } [get_ports { jtag_tms_i }]; # JA4
 
 # tclint-enable line-length, spacing
