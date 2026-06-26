@@ -17,7 +17,12 @@ set -u  # Error on undefined vars
 # Source environment
 source "../env.sh"
 
-VIVADO=${VIVADO:-"vivado"}
+# Select IIS-internal tool commands if we run on IIS machines
+if [ -f /etc/iis.version ]; then
+    VIVADO=${VIVADO:-"vitis-2022.1 vivado"}
+else
+    VIVADO=${VIVADO:-"vivado"}
+fi
 
 mkdir -p build
 mkdir -p out

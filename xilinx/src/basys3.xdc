@@ -64,6 +64,7 @@ set_property -dict { PACKAGE_PIN L1   IOSTANDARD LVCMOS33 } [get_ports { status_
 
 ## UART
 set_property -dict { PACKAGE_PIN A18   IOSTANDARD LVCMOS33 } [get_ports { uart_tx_o }];
+# set_property -dict { PACKAGE_PIN P1    IOSTANDARD LVCMOS33 } [get_ports { uart_tx_o }]; # LD14
 set_property -dict { PACKAGE_PIN B18   IOSTANDARD LVCMOS33 } [get_ports { uart_rx_i }];
 
 # tclint-enable line-length, spacing
